@@ -1,15 +1,15 @@
 use image::io::Reader as ImageReader;
 use image::imageops::FilterType as Filter;
 
-static simple_brightness_char: [char; 10] = [' ','.',':','-','=','+','*','#','%','@'];
-static complex_brightness_char: [char; 69] = [' ', '.', '\'', '`', '^', '"', ',', ':', ';', 'I', 'l', '!', 'i', '>', '<', '~', '+', '_', '-', '?', ']', '[', '}', '{', '1', ')', '(', '|', '\\', '/', 't', 'f', 'j', 'r', 'x', 'n', 'u', 'v', 'c', 'z', 'X', 'Y', 'U', 'J', 'C', 'L', 'Q', '0', 'O', 'Z', 'm', 'w', 'q', 'p', 'd', 'k', 'h', 'a', 'o', '*', '#', 'M', 'W', '&', '8', '%', 'B', '@', '$'];
+static SIMPLE_BRIGHTNESS_CHAR: [char; 10] = [' ','.',':','-','=','+','*','#','%','@'];
+static COMPLEX_BRIGHTNESS_CHAR: [char; 69] = [' ', '.', '\'', '`', '^', '"', ',', ':', ';', 'I', 'l', '!', 'i', '>', '<', '~', '+', '_', '-', '?', ']', '[', '}', '{', '1', ')', '(', '|', '\\', '/', 't', 'f', 'j', 'r', 'x', 'n', 'u', 'v', 'c', 'z', 'X', 'Y', 'U', 'J', 'C', 'L', 'Q', '0', 'O', 'Z', 'm', 'w', 'q', 'p', 'd', 'k', 'h', 'a', 'o', '*', '#', 'M', 'W', '&', '8', '%', 'B', '@', '$'];
 
 pub fn transform(path: &str, max_pixel: u32, is_simple: bool, invert: bool) -> Vec<Vec<char>> {
     let brightness_char;
     if is_simple {
-        brightness_char = simple_brightness_char.to_vec();
+        brightness_char = SIMPLE_BRIGHTNESS_CHAR.to_vec();
     } else {
-        brightness_char = complex_brightness_char.to_vec();
+        brightness_char = COMPLEX_BRIGHTNESS_CHAR.to_vec();
     }
 
     let img = ImageReader::open(path)
