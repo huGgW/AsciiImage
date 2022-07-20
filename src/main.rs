@@ -2,23 +2,19 @@ use std::fs::File;
 use std::io::prelude::*;
 
 mod to_ascii;
+mod save_ascii;
+mod print_ascii;
 
 fn main() {
-    let path = "./images/arch.png";
-    let max_pixel = 64;
+    let img_path = "images/ubuntu.png";
+    let max_pixel = 16;
     let is_simple = true;
-    let invert = true;
+    let invert = false;
 
-    let ascii_mat = to_ascii::transform(path, max_pixel, is_simple, invert);   
+    let ascii_mat = to_ascii::transform(img_path, max_pixel, is_simple, invert);   
 
-    let mut file = File::create("./result/result.txt").unwrap();
+    let file_path = "./result/result.txt";
 
-    for row in ascii_mat {
-        // for make it square, twice per char 
-        for c in row {
-            write!(file, "{}{}", c, c).unwrap();
-        }
-        writeln!(file).unwrap();
-    }
-
+    save_ascii::save(file_path, &ascii_mat);
+    print_ascii::print(&ascii_mat);
 }
