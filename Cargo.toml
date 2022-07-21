@@ -1,5 +1,5 @@
 [package]
-name = "AsciiImage"
+name = "ascii_image"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 image = "0.24.2"
-clap = "3.2.10"
+clap = { version = "3.2.10", features = ["derive"]}
