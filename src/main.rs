@@ -1,58 +1,23 @@
-use clap::{Parser, Subcommand, Args};
+use clap::Parser;
 
 mod to_ascii;
 mod save_ascii;
 mod print_ascii;
-
-#[derive(Parser)]
-#[clap(author, version, about)]
-struct Cli {
-    #[clap(subcommand)]
-    command: Option<Commands>,
-}
-
-#[derive(Subcommand)]
-enum Commands {
-    Save(Save),
-    Print(Print),
-}
-
-#[derive(Args)]
-struct Save {
-    #[clap(short, long, default_value_t = String::from("./images/image.png"))]
-    imgdir: String,
-    #[clap(short, long, default_value_t = String::from("./result/result.txt"))]
-    savedir: String,
-    #[clap(short, long, default_value_t = 16u32)]
-    size: u32,
-    #[clap(short, long, action)]
-    complex: bool,
-    #[clap(short, long, action)]
-    invert: bool,
-}
-
-#[derive(Args)]
-struct Print {
-    #[clap(short, long, default_value_t = String::from("./images/image.png"))]
-    imgdir: String,
-    #[clap(short, long, default_value_t = 16u32)]
-    size: u32,
-    #[clap(short, long, action)]
-    complex: bool,
-    #[clap(short, long, action)]
-    invert: bool,
-}
+mod cli_parse;
 
 fn main() {
-    let img_path = "images/ubuntu.png";
-    let max_pixel = 16;
-    let is_simple = true;
-    let invert = false;
+    let cli = cli_parse::Cli::parse();
 
-    let ascii_mat = to_ascii::transform(img_path, max_pixel, is_simple, invert);   
-
-    let file_path = "./result/result.txt";
-
-    save_ascii::save(file_path, &ascii_mat);
-    print_ascii::print(&ascii_mat);
+    if let Some(Commands) = &cli.command {
+        match Commands {
+            cli_parse::Commands::Save(save) => {
+                let ascii_mat = to_ascii::transform(&(save.img_path), save.size, !(save.complex), save.invert);
+                save_ascii::save(&(save.save_path), &ascii_mat)
+            },
+            cli_parse::Commands::Print(print) => {
+                let ascii_mat = to_ascii::transform(&(print.img_path), print.size, !(print.complex), print.invert);
+                print_ascii::print(&ascii_mat);
+            },
+        }
+    }
 }
