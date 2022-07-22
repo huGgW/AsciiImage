@@ -1,23 +1,23 @@
-use clap::{Parser, SubCommand};
+use clap::{Parser, Subcommand, Args};
 
 mod to_ascii;
 mod save_ascii;
 mod print_ascii;
 
+#[derive(Parser)]
+#[clap(author, version, about)]
 struct Cli {
     #[clap(subcommand)]
     command: Option<Commands>,
 }
 
-#[derive(SubCommand)]
+#[derive(Subcommand)]
 enum Commands {
-    #[clap(subcommand)]
-    save(Save),
-    #[clap(subcommand)]
-    print(Print),
+    Save(Save),
+    Print(Print),
 }
 
-#[derive(SubCommand)]
+#[derive(Args)]
 struct Save {
     #[clap(short, long, default_value_t = String::from("./images/image.png"))]
     imgdir: String,
@@ -31,7 +31,7 @@ struct Save {
     invert: bool,
 }
 
-#[derive(SubCommand)]
+#[derive(Args)]
 struct Print {
     #[clap(short, long, default_value_t = String::from("./images/image.png"))]
     imgdir: String,
